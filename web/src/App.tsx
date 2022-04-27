@@ -1,7 +1,31 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { useQuery } from './models';
 
 function App() {
-  return <h1>Hello Edge</h1>;
+  const { data, loading, error } = useQuery((store) =>
+    store.queryStations(undefined, (qb) =>
+      qb.name.metrics((metric) => metric.margin.profit),
+    ),
+  );
+
+  if (loading) {
+    return <i>Loading...</i>;
+  }
+
+  if (error) {
+    return <b>ERROR</b>;
+  }
+
+  return (
+    <div>
+      {data?.stations.map((station) => (
+        <div>
+          {station.name} - {JSON.stringify(station.metrics)}
+        </div>
+      ))}
+    </div>
+  );
 }
 
-export default App;
+export default observer(App);

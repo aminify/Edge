@@ -3,15 +3,28 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { RootStore, StoreContext } from './models';
+import { createHttpClient } from 'mst-gql';
+
+const rootStore = RootStore.create(undefined, {
+  gqlHttpClient: createHttpClient('http://localhost:8080/graphql'),
+});
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <StoreContext.Provider value={rootStore}>
+      <App />
+    </StoreContext.Provider>
+  </React.StrictMode>,
 );
+
+if (process.env.NODE_ENV === 'development') {
+  // @ts-ignore
+  window.store = rootStore;
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
