@@ -1,10 +1,11 @@
+import { lighten } from 'color2k';
 import icons from 'icons';
 import { observer } from 'mobx-react-lite';
 import { useQuery } from 'models';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import routes from 'routes';
-import styled from 'styled-components/macro';
+import styled, { keyframes } from 'styled-components/macro';
+import theme from 'theme';
 
 function Station() {
   const params = useParams();
@@ -27,7 +28,7 @@ function Station() {
 
   return (
     <div>
-      <Link to={routes.STATIONS_LIST}>{icons.BACK} Stations</Link>
+      <Link to={-1 as any}>{icons.BACK} Stations</Link>
       <h1 style={{ textAlign: 'center' }}>{name}</h1>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <DetailCard>
@@ -49,15 +50,24 @@ function Station() {
 
 export default observer(Station);
 
+const cardAnimation = keyframes`
+  0% {
+    transform: scale(0.1);
+    background-color: ${theme.gray};
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    background-color: ${lighten(theme.secondary, 0.4)};
+  }
+`;
+
 const DetailCard = styled.div`
+  color: white;
   width: 150px;
   padding: 20px 0;
   text-align: center;
-  background-color: ${({ theme }) => theme.gray};
-  transition: transform 0.3s;
+  background-color: ${lighten(theme.secondary, 0.4)};
   border-radius: 10px;
-  :hover {
-    transform: scale(1.2) rotate(3deg);
-    background-color: ${({ theme }) => theme.green};
-  }
+  transform: scale(1);
+  animation: ${cardAnimation} 0.3s;
 `;
