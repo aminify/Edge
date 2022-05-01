@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RootStore, StoreContext } from './models';
 import { createHttpClient } from 'mst-gql';
+import { ThemeProvider } from 'styled-components';
+import theme from './theme';
 
 const rootStore = RootStore.create(undefined, {
   gqlHttpClient: createHttpClient('http://localhost:8080/graphql'),
@@ -16,7 +18,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <StoreContext.Provider value={rootStore}>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </StoreContext.Provider>
   </React.StrictMode>,
 );

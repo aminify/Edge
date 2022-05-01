@@ -1,30 +1,21 @@
 import { observer } from 'mobx-react-lite';
+import NotFound from 'pages/NotFound';
+import Station from 'pages/Station';
+import StationsList from 'pages/StationsList';
 import React from 'react';
-import { useQuery } from './models';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import routes from 'routes';
 
 function App() {
-  const { data, loading, error } = useQuery((store) =>
-    store.queryStations(undefined, (qb) =>
-      qb.name.metrics((metric) => metric.margin.profit),
-    ),
-  );
-
-  if (loading) {
-    return <i>Loading...</i>;
-  }
-
-  if (error) {
-    return <b>ERROR</b>;
-  }
-
   return (
-    <div>
-      {data?.stations.map((station) => (
-        <div>
-          {station.name} - {JSON.stringify(station.metrics)}
-        </div>
-      ))}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Navigate to={routes.STATIONS_LIST} replace />} />
+        <Route path={routes.STATIONS_LIST} element={<StationsList />} />
+        <Route path={routes.STATION} element={<Station />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
