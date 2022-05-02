@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { RootStore, StoreContext } from './models';
-import { createHttpClient } from 'mst-gql';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
 
-const rootStore = RootStore.create(undefined, {
-  gqlHttpClient: createHttpClient('http://localhost:8080/graphql'),
+const client = new ApolloClient({
+  uri: '/graphql', // to get proxied using proxy field in package.json and avoid CORS
+  cache: new InMemoryCache(),
 });
 
 const root = ReactDOM.createRoot(
@@ -17,18 +17,13 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <StoreContext.Provider value={rootStore}>
+    <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
-    </StoreContext.Provider>
+    </ApolloProvider>
   </React.StrictMode>,
 );
-
-if (process.env.NODE_ENV === 'development') {
-  // @ts-ignore
-  window.store = rootStore;
-}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

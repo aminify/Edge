@@ -1,7 +1,7 @@
+import { useQuery } from '@apollo/client';
 import { lighten } from 'color2k';
 import icons from 'icons';
-import { observer } from 'mobx-react-lite';
-import { useQuery } from 'models';
+import stationByIdQuery from 'queries/stationByIdQuery';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components/macro';
@@ -9,11 +9,11 @@ import theme from 'theme';
 
 function Station() {
   const params = useParams();
-  const { data, loading, error } = useQuery((store) =>
-    store.queryStation({ id: +params.id! }, (qb) =>
-      qb.name.metrics((metric) => metric.margin.profit.volume),
-    ),
-  );
+  const { data, loading, error } = useQuery(stationByIdQuery, {
+    variables: {
+      id: +params.id!,
+    },
+  });
 
   if (loading) {
     return <i>Loading...</i>;
@@ -48,7 +48,7 @@ function Station() {
   );
 }
 
-export default observer(Station);
+export default Station;
 
 const cardAnimation = keyframes`
   0% {

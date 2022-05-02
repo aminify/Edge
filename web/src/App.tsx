@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react-lite';
 import NotFound from 'pages/NotFound';
 import Station from 'pages/Station';
 import StationsList from 'pages/StationsList';
@@ -19,4 +18,4 @@ function App() {
   );
 }
 
-export default observer(App);
+export default App;
