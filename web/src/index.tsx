@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
+import { BrowserRouter } from 'react-router-dom';
 
 const client = new ApolloClient({
   uri: '/graphql', // to get proxied using proxy field in package.json and avoid CORS
@@ -19,7 +20,9 @@ root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </ThemeProvider>
     </ApolloProvider>
   </React.StrictMode>,
